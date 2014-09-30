@@ -225,7 +225,7 @@ public class Grid extends JFrame
 			}
 			else
 			{
-				h = diag_cost*distx + cross_cost*(disty-distx);
+				h = diag_cost*distx + cross_cost*(disty-distx);//this is a dummy comment
 			}
 		}
 		else  // else do manhattan distance
