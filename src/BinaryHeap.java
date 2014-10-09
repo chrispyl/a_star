@@ -1,21 +1,34 @@
 import static java.lang.Math.floor;
 
+/**
+ * A binary heap for A* algorithm.
+ *
+ */
 public class BinaryHeap {
 	
 	Tile[] array;
 	int iter=1;	//to iter deixnei thn thesi pou tha topotheththei to epomeno stoixeio molis ginei to insert prin to percolate up
 	
+	/**Checks if heap is empty
+	 * @return
+	 */
 	public boolean isEmpty()
 	{
 		if(iter==1) return true;
 		return false;
 	}
 	
+	/**
+	 * @param size Maximum size of heap.
+	 */
 	public BinaryHeap(int size)
 	{
 		array = new Tile[size];
 	}
 	
+	/**
+	 * @return The tile with the minimum F value.
+	 */
 	public Tile getMin()
 	{
 		Tile min=array[1];
@@ -71,27 +84,36 @@ public class BinaryHeap {
 		return min;
 	}
 	
-	public int getParent(int index)
+	/**
+	 * @param index The index of the node that we are now.
+	 * @return The index of the parent of the node that we are now.
+	 */
+	private int getParent(int index)
 	{
 		return (int) floor(index/2);
 	}
 	
-	public int getLeftChildIndex(int index)
+	/**
+	 * @param index The index of the node that we are now.
+	 * @return The index of the left child of the node that we are now.
+	 */
+	private int getLeftChildIndex(int index)
 	{
 		return 2*index;
 	}
 	
-	public int getRightChildIndex(int index)
+	/**
+	 * @param index The index of the node that we are now.
+	 * @return The index of the right child of the node that we are now.
+	 */
+	private int getRightChildIndex(int index)
 	{
 		return 2*index+1;
 	}
 	
-	public void printArray()
-	{
-		for(int i=0; i<array.length; i++) System.out.print(" " + array[i] + " ");
-		System.out.println();
-	}
-	
+	/**
+	 * @param element The tile to be inserted to the heap.
+	 */
 	public void insert(Tile element)
 	{
 		array[iter]=element;
