@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 public class Grid extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-	private final int dimension=65;
+	private final int dimension=165;
 	static Tile[] tiles;
 	private int start;		 //cyan
 	private int destination; //red
@@ -55,7 +55,7 @@ public class Grid extends JFrame
 		return true;
 	}
 	
-	public void parentsAndGFH(int tile, int currentTile, ArrayList<Integer> openlist, ArrayList<Integer> closedlist, ArrayList<Integer> existInOpenlist)
+	public void parentsAndGFH(int tile, int currentTile, BinaryHeap openlist, ArrayList<Integer> closedlist, ArrayList<Integer> existInOpenlist)
 	{
 		int step;
 		if(tiles[tile].getBackground()!=barriercolor && closedlist.get(tile)==0)
@@ -71,7 +71,7 @@ public class Grid extends JFrame
 			
 			if(existInOpenlist.get(tile)==0)
 			{
-				openlist.add(tile);
+				openlist.insert(tiles[tile]);
 				existInOpenlist.set(tile, 1);
 				tiles[tile].seth(calculateH(tile));
 				tiles[tile].setPointsTo(currentTile);
@@ -109,11 +109,10 @@ public class Grid extends JFrame
 		Long time=System.nanoTime();
 		int d=dimension*dimension;
 		boolean reseted=false;
-		ArrayList<Integer> openlist = new ArrayList<Integer>();
+		BinaryHeap openlist = new BinaryHeap(d);
 		ArrayList<Integer> closedlist = new ArrayList<Integer>();
 		ArrayList<Integer> openlistE = new ArrayList<Integer>();
 		for(int size=dimension*dimension, i=0; i<size; i++) {closedlist.add(0); openlistE.add(0);}
-		insertion_sort sortObject = new insertion_sort();
 		int currentTile=start;
 		tiles[start].seth(calculateH(start));
 		tiles[start].setf(tiles[start].geth()); 	//logo omorfias tooltip...
@@ -171,16 +170,7 @@ public class Grid extends JFrame
 				break;
 			}
 			
-			if(currentTile!=start) 
-			{
-				sortObject.sort(openlist, false);
-			} 
-			else
-			{
-				sortObject.sort(openlist, true);	//kanei sort me bash ta f
-			}
-			currentTile=openlist.get(openlist.size()-1);
-			openlist.remove(openlist.size()-1);
+			currentTile=openlist.getMin().getNumber();
 			openlistE.set(currentTile, 0);
 			
 			if(currentTile!=destination) explored.add(currentTile);
@@ -196,7 +186,7 @@ public class Grid extends JFrame
 		for(int size=explored.size(), i=0; i<size; i++)
 		{
 			tiles[explored.get(i)].setBackground(exploredcolor);
-			mysleep(wait);
+		//	mysleep(wait);
 		}
 		
 		int i=destination;
@@ -206,7 +196,7 @@ public class Grid extends JFrame
 			{
 				i=tiles[i].getPointsTo();
 				if(i!=start) tiles[i].setBackground(pathcolor);
-				mysleep(wait);
+			//	mysleep(wait);
 			}
 		}
 	}
@@ -225,7 +215,7 @@ public class Grid extends JFrame
 			}
 			else
 			{
-				h = diag_cost*distx + cross_cost*(disty-distx);//this is a dummy comment
+				h = diag_cost*distx + cross_cost*(disty-distx);
 			}
 		}
 		else  // else do manhattan distance
@@ -452,7 +442,7 @@ public class Grid extends JFrame
 		setSize(795, 560); 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		populateGrid();
-		beautifyMap();
+		//beautifyMap();
 		//saveMap();
 		createGUI();
 		setLocationRelativeTo(null); //gia na einai sto kentro ths othonhs
