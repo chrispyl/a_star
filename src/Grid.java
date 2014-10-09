@@ -71,11 +71,11 @@ public class Grid extends JFrame
 			
 			if(openlist.containsKey(tile)==false)
 			{
-				openlist.insert(tiles[tile]);
 				tiles[tile].seth(calculateH(tile));
 				tiles[tile].setPointsTo(currentTile);
 				tiles[tile].setg(tiles[currentTile].getg()+step);
 				tiles[tile].setf(tiles[tile].getg()+tiles[tile].geth());
+				openlist.insert(tiles[tile]);
 			}
 			else
 			{
@@ -162,14 +162,14 @@ public class Grid extends JFrame
 				}
 			}
 			
-			if(openlist.isEmpty())
+			if(openlist.heapEmpty())
 			{
 				reseted=true;
 				break;
 			}
-			
+
 			currentTile=openlist.getMin().getNumber();
-			
+			//System.out.print(tiles[currentTile].getNumber()+" ");
 			if(currentTile!=destination) explored.add(currentTile);
 		}
 		System.out.println((System.nanoTime()-time)*0.000001+" ms");
@@ -178,7 +178,7 @@ public class Grid extends JFrame
 	
 	public void drawPath()
 	{
-		final long wait=400/dimension;  //750 ws analogia apo dimension=15 * sleep=50 epeidh eixe kalo apotelesma
+		final long wait=400/dimension;  
 
 		for(int size=explored.size(), i=0; i<size; i++)
 		{

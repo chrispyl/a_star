@@ -14,11 +14,23 @@ public class BinaryHeap extends HashMap<Integer, Integer> {
 	/**Checks if heap is empty
 	 * @return
 	 */
-	public boolean isEmpty()
+	public boolean heapEmpty()
 	{
 		if(iter==1) return true;
 		return false;
 	}
+	
+	/*public void printheap()
+	{
+		System.out.print("Heap"+" ");
+		if(iter>=2){
+		for(int i=1; i<iter-1; i++)
+		{
+			System.out.print(array[i].getNumber()+"-"+array[i].getf()+" ");
+		}
+		System.out.println();
+		}
+	}*/
 	
 	/**
 	 * @param size Maximum size of heap.
