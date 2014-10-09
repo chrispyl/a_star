@@ -55,7 +55,7 @@ public class Grid extends JFrame
 		return true;
 	}
 	
-	public void parentsAndGFH(int tile, int currentTile, BinaryHeap openlist, ArrayList<Integer> closedlist, ArrayList<Integer> existInOpenlist)
+	public void parentsAndGFH(int tile, int currentTile, BinaryHeap openlist, ArrayList<Integer> closedlist)
 	{
 		int step;
 		if(tiles[tile].getBackground()!=barriercolor && closedlist.get(tile)==0)
@@ -69,10 +69,9 @@ public class Grid extends JFrame
 				step=diag_cost;
 			}
 			
-			if(existInOpenlist.get(tile)==0)
+			if(openlist.containsKey(tile)==false)
 			{
 				openlist.insert(tiles[tile]);
-				existInOpenlist.set(tile, 1);
 				tiles[tile].seth(calculateH(tile));
 				tiles[tile].setPointsTo(currentTile);
 				tiles[tile].setg(tiles[currentTile].getg()+step);
@@ -111,8 +110,7 @@ public class Grid extends JFrame
 		boolean reseted=false;
 		BinaryHeap openlist = new BinaryHeap(d);
 		ArrayList<Integer> closedlist = new ArrayList<Integer>();
-		ArrayList<Integer> openlistE = new ArrayList<Integer>();
-		for(int size=dimension*dimension, i=0; i<size; i++) {closedlist.add(0); openlistE.add(0);}
+		for(int size=dimension*dimension, i=0; i<size; i++) {closedlist.add(0);}
 		int currentTile=start;
 		tiles[start].seth(calculateH(start));
 		tiles[start].setf(tiles[start].geth()); 	//logo omorfias tooltip...
@@ -123,44 +121,44 @@ public class Grid extends JFrame
 			closedlist.set(currentTile, 1);
 			if(currentTile>dimension && currentTile<d-dimension && currentTile%dimension!=0  && (currentTile+1)%dimension!=0)
 			{
-				parentsAndGFH(currentTile-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-1);
-				parentsAndGFH(currentTile+1, currentTile, openlist, closedlist, openlistE);  checked.add(currentTile+1);
-				parentsAndGFH(currentTile-dimension, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension);
-				parentsAndGFH(currentTile+dimension, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension);
+				parentsAndGFH(currentTile-1, currentTile, openlist, closedlist); checked.add(currentTile-1);
+				parentsAndGFH(currentTile+1, currentTile, openlist, closedlist);  checked.add(currentTile+1);
+				parentsAndGFH(currentTile-dimension, currentTile, openlist, closedlist); checked.add(currentTile-dimension);
+				parentsAndGFH(currentTile+dimension, currentTile, openlist, closedlist); checked.add(currentTile+dimension);
 				if(cutcorners)
 				{
-					if(tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension-1);}
-					if(tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension-1);}
-					if(tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension+1);}
-					if(tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension-1);}
+					if(tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist); checked.add(currentTile-dimension-1);}
+					if(tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist); checked.add(currentTile+dimension-1);}
+					if(tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist); checked.add(currentTile-dimension+1);}
+					if(tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist); checked.add(currentTile+dimension-1);}
 				}
 				else
 				{
-					parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension-1);
-					parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension-1);
-					parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension+1);
-					parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension+1);
+					parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist); checked.add(currentTile-dimension-1);
+					parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist); checked.add(currentTile+dimension-1);
+					parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist); checked.add(currentTile-dimension+1);
+					parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist); checked.add(currentTile+dimension+1);
 				}
 			}
 			else
 			{	
-				if(exist(currentTile-1, currentTile)) {parentsAndGFH(currentTile-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-1);}
-				if(exist(currentTile+1, currentTile)) {parentsAndGFH(currentTile+1, currentTile, openlist, closedlist, openlistE);  checked.add(currentTile+1);}
-				if(exist(currentTile-dimension, currentTile)) {parentsAndGFH(currentTile-dimension, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension);}
-				if(exist(currentTile+dimension, currentTile)) {parentsAndGFH(currentTile+dimension, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension);}
+				if(exist(currentTile-1, currentTile)) {parentsAndGFH(currentTile-1, currentTile, openlist, closedlist); checked.add(currentTile-1);}
+				if(exist(currentTile+1, currentTile)) {parentsAndGFH(currentTile+1, currentTile, openlist, closedlist);  checked.add(currentTile+1);}
+				if(exist(currentTile-dimension, currentTile)) {parentsAndGFH(currentTile-dimension, currentTile, openlist, closedlist); checked.add(currentTile-dimension);}
+				if(exist(currentTile+dimension, currentTile)) {parentsAndGFH(currentTile+dimension, currentTile, openlist, closedlist); checked.add(currentTile+dimension);}
 				if(cutcorners)
 				{
-					if(exist(currentTile-1, currentTile) && exist(currentTile-dimension, currentTile) && tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension-1);}
-					if(exist(currentTile-1, currentTile) && exist(currentTile+dimension, currentTile) && tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension-1);}
-					if(exist(currentTile+1, currentTile) && exist(currentTile-dimension, currentTile) && tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension+1);}
-					if(exist(currentTile+1, currentTile) && exist(currentTile+dimension, currentTile) && tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension-1);}
+					if(exist(currentTile-1, currentTile) && exist(currentTile-dimension, currentTile) && tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist); checked.add(currentTile-dimension-1);}
+					if(exist(currentTile-1, currentTile) && exist(currentTile+dimension, currentTile) && tiles[currentTile-1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist); checked.add(currentTile+dimension-1);}
+					if(exist(currentTile+1, currentTile) && exist(currentTile-dimension, currentTile) && tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile-dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist); checked.add(currentTile-dimension+1);}
+					if(exist(currentTile+1, currentTile) && exist(currentTile+dimension, currentTile) && tiles[currentTile+1].getBackground()!=barriercolor && tiles[currentTile+dimension].getBackground()!=barriercolor) {parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist); checked.add(currentTile+dimension-1);}
 				}
 				else
 				{
-					if(exist(currentTile-dimension-1, currentTile)) {parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension-1);}
-					if(exist(currentTile+dimension-1, currentTile)) {parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension-1);}
-					if(exist(currentTile-dimension+1, currentTile)) {parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile-dimension+1);}
-					if(exist(currentTile+dimension+1, currentTile)) {parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist, openlistE); checked.add(currentTile+dimension+1);}
+					if(exist(currentTile-dimension-1, currentTile)) {parentsAndGFH(currentTile-dimension-1, currentTile, openlist, closedlist); checked.add(currentTile-dimension-1);}
+					if(exist(currentTile+dimension-1, currentTile)) {parentsAndGFH(currentTile+dimension-1, currentTile, openlist, closedlist); checked.add(currentTile+dimension-1);}
+					if(exist(currentTile-dimension+1, currentTile)) {parentsAndGFH(currentTile-dimension+1, currentTile, openlist, closedlist); checked.add(currentTile-dimension+1);}
+					if(exist(currentTile+dimension+1, currentTile)) {parentsAndGFH(currentTile+dimension+1, currentTile, openlist, closedlist); checked.add(currentTile+dimension+1);}
 				}
 			}
 			
@@ -171,7 +169,6 @@ public class Grid extends JFrame
 			}
 			
 			currentTile=openlist.getMin().getNumber();
-			openlistE.set(currentTile, 0);
 			
 			if(currentTile!=destination) explored.add(currentTile);
 		}

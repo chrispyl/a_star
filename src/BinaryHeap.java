@@ -1,10 +1,12 @@
 import static java.lang.Math.floor;
 
+import java.util.HashMap;
+
 /**
  * A binary heap for A* algorithm.
  *
  */
-public class BinaryHeap {
+public class BinaryHeap extends HashMap<Integer, Integer> {
 	
 	Tile[] array;
 	int iter=1;	//to iter deixnei thn thesi pou tha topotheththei to epomeno stoixeio molis ginei to insert prin to percolate up
@@ -81,6 +83,8 @@ public class BinaryHeap {
 			}
 		}
 		
+		remove(min.getNumber());
+		
 		return min;
 	}
 	
@@ -129,6 +133,8 @@ public class BinaryHeap {
 			parent=getParent(parent);
 		}
 		iter++;
+		
+		put(element.getNumber(), element.getNumber());
 	}
 }
 
