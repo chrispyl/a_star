@@ -546,7 +546,7 @@ public class Grid extends JFrame
 				boolean destset=false;
 			    Grid.tiles[frame.start].setBackground(mapcolor);
 			    Grid.tiles[frame.destination].setBackground(mapcolor);
-			    while(!startset)	//mhn proxwrhseis an den pathsei kapou sto xarth gia start
+			    while(!startset)	//don't proceed if a button isn't pressed on the map
 			    {
 			    	frame.mysleep(sleep);
 
