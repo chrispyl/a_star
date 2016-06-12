@@ -72,7 +72,7 @@ public class Tile extends JButton implements MouseListener {
 		//x=number/dimension;
 		//y=number%dimension;
 		this.number=number;
-	    //setBorderPainted(false);
+	        setBorderPainted(false);
 		addMouseListener(this);
 	}
 
