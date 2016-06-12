@@ -5,7 +5,7 @@ The openlist is a hash-map enhanced binary heap for performance reasons. A GUI i
 ## **GUI**
 
 #### **Map**
-Every time the gui opens a random map is created. There are two colors in it, light and dark grey, which represent if the terrain is accesible or not respectively. When a tile is pressed its' color alternates between these two colors.
+Every time the gui opens a random map is created. There are two colors in it, light and dark grey, which represent if the terrain is accesible or not respectively. When a tile is pressed its color alternates between these two colors.
 
 #### **Path**
 The orange color shows the path selected from start to finish. The yellow segments are tiles which the algorithm examined but didn't include in the path.
