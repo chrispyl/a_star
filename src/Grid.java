@@ -17,8 +17,8 @@ public class Grid extends JFrame
 	private int cross_cost=5; //cross movement cost
 	private int diag_cost=7; //diagonal movement cost
 	
-	private ArrayList<Integer> explored = new ArrayList<Integer>();  //oi komboi pou pataei panw
-	private ArrayList<Integer> checked = new ArrayList<Integer>();   //oi komboi pou elegxei akoma kai an einai empodia, xrhsh gia na mhn kanei redraw meta apo kathe allagh xrwmatos tile pou den exei sxesh me to path
+	private ArrayList<Integer> explored = new ArrayList<Integer>();  //the nodes it steps upon
+	private ArrayList<Integer> checked = new ArrayList<Integer>();   //the nodes it checks even if they are obstacles, used in order not to redraw every time a change of color happens that doesn't affect the path
 	JTextField gcrossTextfield;						
 	JTextField gdiagTextfield;	
 	
@@ -42,16 +42,16 @@ public class Grid extends JFrame
 	static final Color westbuttoncolor = new Color(206/255f, 209/255f, 205/255f);
 	static final Color westbuttonforegroundcolor = null;
 	
-	public static boolean doingSomethingElse=false; //an trexei hdh o a_star h h reset h h drawpath na mhn mporei na pathsei tpt o xrhsths
+	public static boolean doingSomethingElse=false; //if a_star or reset or drawpath is already running, this will prevent the user to press anything
 	
 	public boolean exist(int tilenumber, int previoustile)
 	{
 		if(tilenumber>=(dimension*dimension) || tilenumber<0) return false;
-		if(tilenumber%dimension==0 && (previoustile+1)%dimension==0) return false; //auto kai to katw einai gia na mhn leitourgei kuklika o xarhs
+		if(tilenumber%dimension==0 && (previoustile+1)%dimension==0) return false; //this and the one below are put in order to prevent the map from working in a cyclic manner
 		if((tilenumber+1)%dimension==0 && previoustile%dimension==0) return false;
 		/*
 		int x=tilenumber/dimension, y=tilenumber%dimension;	//den xrhsimopoiw ap eutheias ta x,y twn nodes gt an den uparxoun oi komboi kollhse
-		if(x<0 || x>(dimension-1) || y<0 || y>(dimension-1)) return false;*/  //an thelw me x y bazww auta
+		if(x<0 || x>(dimension-1) || y<0 || y>(dimension-1)) return false;*/  //if i want to use x, y i put these
 		return true;
 	}
 	
@@ -113,9 +113,9 @@ public class Grid extends JFrame
 		for(int size=dimension*dimension, i=0; i<size; i++) {closedlist.add(0);}
 		int currentTile=start;
 		tiles[start].seth(calculateH(start));
-		tiles[start].setf(tiles[start].geth()); 	//logo omorfias tooltip...
+		tiles[start].setf(tiles[start].geth()); 	//for nicer tooltip reasons
 		tiles[start].setg(0);
-		tiles[destination].setPointsTo(-1); //bohthaei sth drawPath gia na dw an eftase sto destination
+		tiles[destination].setPointsTo(-1); //helps in drawPath to check if it reached desitnation
 		while(currentTile!=destination)
 		{
 			closedlist.set(currentTile, 1);
@@ -173,7 +173,7 @@ public class Grid extends JFrame
 			if(currentTile!=destination) explored.add(currentTile);
 		}
 		System.out.println((System.nanoTime()-time)*0.000001+" ms");
-		if(reseted) reset();	//tha mporouse na tan kai mes sto openlist.isEmpty() alla tha metriotan sto xrono pou kanei h a_star 
+		if(reseted) reset();	//it could be located inside the openlist.isEmpty() brackets but it would be counted in the execution time a_star does 
 	}
 	
 	public void drawPath()
@@ -187,7 +187,7 @@ public class Grid extends JFrame
 		}
 		
 		int i=destination;
-		if(tiles[destination].getPointsTo()!=-1) //an den mporese na teliwsei to a* ara otan den uparxei monopati gia dest
+		if(tiles[destination].getPointsTo()!=-1) //if a* couldn't finish, so there isn't a path to destination
 		{
 			while(i!=start)
 			{
@@ -217,7 +217,7 @@ public class Grid extends JFrame
 		}
 		else  // else do manhattan distance
 		{
-			h=cross_cost*(distx+disty);	//tha mporouse kai xwris to *cross_cost alla etsi belitwnetai to heuristic, isxuei dhladh mono gia manhattan distance. //to H dhladh prepei na einai idias klimakas me to cross_cost
+			h=cross_cost*(distx+disty);	//it could also be without *cross_cost but this improves the heuristic, only for manhattan distance //H should be in the same scale with cross_cost
 		} 
 		return h;
 	}					   
@@ -449,7 +449,7 @@ public class Grid extends JFrame
 	
 	public static void main(String[] args)
 	{
-		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true"); //to bazw logo bug JDK
+		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true"); //to prevent a JDK bug
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException
@@ -461,7 +461,7 @@ public class Grid extends JFrame
 		//final int d=frame.dimension*frame.dimension;
 		final long sleep=100;
 		
-		frame.mysleep(500);		//gia na mhn ksekinaei prin strwsei pinakas...
+		frame.mysleep(500);		//in order not to start before the grid is filled
 		
 		frame.a_star();
 		frame.drawPath();
@@ -570,13 +570,13 @@ public class Grid extends JFrame
 			    		}
 			    	}*/
 			    }
-			    while(!destset)		//mhn proxwrhseis an den pathsei kapou sto xarth gia destination
+			    while(!destset)		//don't contunue if the user hasn't stepped somewhere for destination
 			    {
 			    	frame.mysleep(sleep);
 
 			    	if(Tile.tileNumberChanged!=-1)
 			    	{
-			    		if(Tile.tileNumberChanged!=frame.start) //gia na mhn bazoun to destination panw sto start
+			    		if(Tile.tileNumberChanged!=frame.start) //to prevent destination be in the same spot as start
 			    		{
 				    		Grid.tiles[Tile.tileNumberChanged].setBackground(destcolor);
 			    			frame.destination=Tile.tileNumberChanged;
@@ -605,7 +605,7 @@ public class Grid extends JFrame
 			}
 			
 			if(Tile.tileNumberChanged!=-1){
-			//for(int i=0; i<d;i++)	//anixneush an exei pathhei koumpi sto xarth
+			//for(int i=0; i<d;i++)	//check if a button is pressed somewhere in the map
 			//{
 				//if(Grid.tiles[i].changed==true)
 				//{
@@ -625,7 +625,7 @@ public class Grid extends JFrame
 			//}
 			
 			///////////////////////////////////////////////////////////////////////////////////////////////////
-			frame.mysleep(sleep);	//gia na mhn ksodeuei kuklous cpu xwris logo se loops enw den uparxei event			
+			frame.mysleep(sleep);	//to prevent the program from eating cpu cycles for no reason			
 		}
 	}	
 }
