@@ -12,10 +12,10 @@ public class Grid extends JFrame
 	private static final long serialVersionUID = 1L;
 	private final int dimension=165;
 	static Tile[] tiles;
-	private int start;		 //cyan
-	private int destination; //red
+	private int start;        //cyan
+	private int destination;  //red
 	private int cross_cost=5; //cross movement cost
-	private int diag_cost=7; //diagonal movement cost
+	private int diag_cost=7;  //diagonal movement cost
 	
 	private ArrayList<Integer> explored = new ArrayList<Integer>();  //the nodes it steps upon
 	private ArrayList<Integer> checked = new ArrayList<Integer>();   //the nodes it checks even if they are obstacles, used in order not to redraw every time a change of color happens that doesn't affect the path
