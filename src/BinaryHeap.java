@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class BinaryHeap extends HashMap<Integer, Integer> {
 	
 	Tile[] array;
-	int iter=1;	//to iter deixnei thn thesi pou tha topotheththei to epomeno stoixeio molis ginei to insert prin to percolate up
+	int iter=1;	//iter shows the position of the next element when the insert is done and before the percolate up
 	
 	/**Checks if heap is empty
 	 * @return
