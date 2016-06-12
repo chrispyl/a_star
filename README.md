@@ -1,0 +1,1 @@
+Initial implementation of A* algorithm. The openlist is a hash-map enhanced binary heap for performance reasons. A GUI is provided for testing purposes.
