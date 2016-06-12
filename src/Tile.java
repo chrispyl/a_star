@@ -9,7 +9,7 @@ public class Tile extends JButton implements MouseListener {
 	private final int number;
 	//int x, y;
 	//boolean changed=false;
-	public static int tileNumberChanged=-1;		//otan den uparxei allagh menei -1, an paththei koumpi pairnei to number tou koumpiou
+	public static int tileNumberChanged=-1;		//when no change occurs stays -1, if a button is pressed it takes its' number
 	/*
 	public int getx()
 	{
