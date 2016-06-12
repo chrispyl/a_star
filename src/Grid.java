@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 public class Grid extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-	private final int dimension=165;
+	private final int dimension=120;
 	static Tile[] tiles;
 	private int start;        //cyan
 	private int destination;  //red
@@ -183,7 +183,7 @@ public class Grid extends JFrame
 		for(int size=explored.size(), i=0; i<size; i++)
 		{
 			tiles[explored.get(i)].setBackground(exploredcolor);
-		//	mysleep(wait);
+			mysleep(wait);
 		}
 		
 		int i=destination;
@@ -193,7 +193,7 @@ public class Grid extends JFrame
 			{
 				i=tiles[i].getPointsTo();
 				if(i!=start) tiles[i].setBackground(pathcolor);
-			//	mysleep(wait);
+				mysleep(wait);
 			}
 		}
 	}
@@ -439,10 +439,10 @@ public class Grid extends JFrame
 		setSize(795, 560); 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		populateGrid();
-		//beautifyMap();
+		beautifyMap();
 		//saveMap();
 		createGUI();
-		setLocationRelativeTo(null); //gia na einai sto kentro ths othonhs
+		setLocationRelativeTo(null); 
 		setVisible(true);
 		setResizable(false);
 	}
